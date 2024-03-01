@@ -1,0 +1,464 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище RaspModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Auditorii">
+          <Key>
+            <PropertyRef Name="id_auditor" />
+          </Key>
+          <Property Name="id_auditor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="number_auditor" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="id_spec_auditor" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Para">
+          <Key>
+            <PropertyRef Name="id_pari" />
+          </Key>
+          <Property Name="id_pari" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_subject_pari" Type="int" Nullable="false" />
+          <Property Name="id_auditor_pari" Type="int" Nullable="false" />
+          <Property Name="id_prepod_pari" Type="int" Nullable="false" />
+          <Property Name="time_start" Type="time" Precision="7" Nullable="false" />
+          <Property Name="time_end" Type="time" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Prepod">
+          <Key>
+            <PropertyRef Name="id_prepod" />
+          </Key>
+          <Property Name="id_prepod" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="lname_prepod" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="name_prepod" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="mname_prepod" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="login" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="id_role_prepod" Type="int" Nullable="false" />
+          <Property Name="id_spec_prepod" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="id_role" />
+          </Key>
+          <Property Name="id_role" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name_role" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Spec">
+          <Key>
+            <PropertyRef Name="id_spec" />
+          </Key>
+          <Property Name="id_spec" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name_spec" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Subjects">
+          <Key>
+            <PropertyRef Name="id_subject" />
+          </Key>
+          <Property Name="id_subject" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name_subject" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="id_spec_subject" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Auditorii_Spec">
+          <End Role="Spec" Type="Self.Spec" Multiplicity="1" />
+          <End Role="Auditorii" Type="Self.Auditorii" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Spec">
+              <PropertyRef Name="id_spec" />
+            </Principal>
+            <Dependent Role="Auditorii">
+              <PropertyRef Name="id_spec_auditor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Para_Auditorii">
+          <End Role="Auditorii" Type="Self.Auditorii" Multiplicity="1" />
+          <End Role="Para" Type="Self.Para" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Auditorii">
+              <PropertyRef Name="id_auditor" />
+            </Principal>
+            <Dependent Role="Para">
+              <PropertyRef Name="id_auditor_pari" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Para_Prepod">
+          <End Role="Prepod" Type="Self.Prepod" Multiplicity="1" />
+          <End Role="Para" Type="Self.Para" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Prepod">
+              <PropertyRef Name="id_prepod" />
+            </Principal>
+            <Dependent Role="Para">
+              <PropertyRef Name="id_prepod_pari" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Para_Subjects">
+          <End Role="Subjects" Type="Self.Subjects" Multiplicity="1" />
+          <End Role="Para" Type="Self.Para" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subjects">
+              <PropertyRef Name="id_subject" />
+            </Principal>
+            <Dependent Role="Para">
+              <PropertyRef Name="id_subject_pari" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Prepod_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="Prepod" Type="Self.Prepod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="id_role" />
+            </Principal>
+            <Dependent Role="Prepod">
+              <PropertyRef Name="id_role_prepod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Prepod_Spec">
+          <End Role="Spec" Type="Self.Spec" Multiplicity="1" />
+          <End Role="Prepod" Type="Self.Prepod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Spec">
+              <PropertyRef Name="id_spec" />
+            </Principal>
+            <Dependent Role="Prepod">
+              <PropertyRef Name="id_spec_prepod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subjects_Spec">
+          <End Role="Spec" Type="Self.Spec" Multiplicity="1" />
+          <End Role="Subjects" Type="Self.Subjects" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Spec">
+              <PropertyRef Name="id_spec" />
+            </Principal>
+            <Dependent Role="Subjects">
+              <PropertyRef Name="id_spec_subject" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище RaspModelContainer">
+          <EntitySet Name="Auditorii" EntityType="Self.Auditorii" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Para" EntityType="Self.Para" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Prepod" EntityType="Self.Prepod" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Spec" EntityType="Self.Spec" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subjects" EntityType="Self.Subjects" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Auditorii_Spec" Association="Self.FK_Auditorii_Spec">
+            <End Role="Spec" EntitySet="Spec" />
+            <End Role="Auditorii" EntitySet="Auditorii" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Para_Auditorii" Association="Self.FK_Para_Auditorii">
+            <End Role="Auditorii" EntitySet="Auditorii" />
+            <End Role="Para" EntitySet="Para" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Para_Prepod" Association="Self.FK_Para_Prepod">
+            <End Role="Prepod" EntitySet="Prepod" />
+            <End Role="Para" EntitySet="Para" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Para_Subjects" Association="Self.FK_Para_Subjects">
+            <End Role="Subjects" EntitySet="Subjects" />
+            <End Role="Para" EntitySet="Para" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Prepod_Role" Association="Self.FK_Prepod_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Prepod" EntitySet="Prepod" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Prepod_Spec" Association="Self.FK_Prepod_Spec">
+            <End Role="Spec" EntitySet="Spec" />
+            <End Role="Prepod" EntitySet="Prepod" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subjects_Spec" Association="Self.FK_Subjects_Spec">
+            <End Role="Spec" EntitySet="Spec" />
+            <End Role="Subjects" EntitySet="Subjects" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RaspModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Auditorii">
+          <Key>
+            <PropertyRef Name="id_auditor" />
+          </Key>
+          <Property Name="id_auditor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="number_auditor" Type="String" MaxLength="3" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="id_spec_auditor" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Spec" Relationship="Self.FK_Auditorii_Spec" FromRole="Auditorii" ToRole="Spec" />
+          <NavigationProperty Name="Para" Relationship="Self.FK_Para_Auditorii" FromRole="Auditorii" ToRole="Para" />
+        </EntityType>
+        <EntityType Name="Para">
+          <Key>
+            <PropertyRef Name="id_pari" />
+          </Key>
+          <Property Name="id_pari" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_subject_pari" Type="Int32" Nullable="false" />
+          <Property Name="id_auditor_pari" Type="Int32" Nullable="false" />
+          <Property Name="id_prepod_pari" Type="Int32" Nullable="false" />
+          <Property Name="time_start" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="time_end" Type="Time" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Auditorii" Relationship="Self.FK_Para_Auditorii" FromRole="Para" ToRole="Auditorii" />
+          <NavigationProperty Name="Prepod" Relationship="Self.FK_Para_Prepod" FromRole="Para" ToRole="Prepod" />
+          <NavigationProperty Name="Subjects" Relationship="Self.FK_Para_Subjects" FromRole="Para" ToRole="Subjects" />
+        </EntityType>
+        <EntityType Name="Prepod">
+          <Key>
+            <PropertyRef Name="id_prepod" />
+          </Key>
+          <Property Name="id_prepod" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="lname_prepod" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name_prepod" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="mname_prepod" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="id_role_prepod" Type="Int32" Nullable="false" />
+          <Property Name="id_spec_prepod" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Para" Relationship="Self.FK_Para_Prepod" FromRole="Prepod" ToRole="Para" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_Prepod_Role" FromRole="Prepod" ToRole="Role" />
+          <NavigationProperty Name="Spec" Relationship="Self.FK_Prepod_Spec" FromRole="Prepod" ToRole="Spec" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="id_role" />
+          </Key>
+          <Property Name="id_role" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name_role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Prepod" Relationship="Self.FK_Prepod_Role" FromRole="Role" ToRole="Prepod" />
+        </EntityType>
+        <EntityType Name="Spec">
+          <Key>
+            <PropertyRef Name="id_spec" />
+          </Key>
+          <Property Name="id_spec" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name_spec" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Auditorii" Relationship="Self.FK_Auditorii_Spec" FromRole="Spec" ToRole="Auditorii" />
+          <NavigationProperty Name="Prepod" Relationship="Self.FK_Prepod_Spec" FromRole="Spec" ToRole="Prepod" />
+          <NavigationProperty Name="Subjects" Relationship="Self.FK_Subjects_Spec" FromRole="Spec" ToRole="Subjects" />
+        </EntityType>
+        <EntityType Name="Subjects">
+          <Key>
+            <PropertyRef Name="id_subject" />
+          </Key>
+          <Property Name="id_subject" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name_subject" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="id_spec_subject" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Para" Relationship="Self.FK_Para_Subjects" FromRole="Subjects" ToRole="Para" />
+          <NavigationProperty Name="Spec" Relationship="Self.FK_Subjects_Spec" FromRole="Subjects" ToRole="Spec" />
+        </EntityType>
+        <Association Name="FK_Auditorii_Spec">
+          <End Role="Spec" Type="Self.Spec" Multiplicity="1" />
+          <End Role="Auditorii" Type="Self.Auditorii" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Spec">
+              <PropertyRef Name="id_spec" />
+            </Principal>
+            <Dependent Role="Auditorii">
+              <PropertyRef Name="id_spec_auditor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Para_Auditorii">
+          <End Role="Auditorii" Type="Self.Auditorii" Multiplicity="1" />
+          <End Role="Para" Type="Self.Para" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Auditorii">
+              <PropertyRef Name="id_auditor" />
+            </Principal>
+            <Dependent Role="Para">
+              <PropertyRef Name="id_auditor_pari" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Para_Prepod">
+          <End Role="Prepod" Type="Self.Prepod" Multiplicity="1" />
+          <End Role="Para" Type="Self.Para" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Prepod">
+              <PropertyRef Name="id_prepod" />
+            </Principal>
+            <Dependent Role="Para">
+              <PropertyRef Name="id_prepod_pari" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Para_Subjects">
+          <End Role="Subjects" Type="Self.Subjects" Multiplicity="1" />
+          <End Role="Para" Type="Self.Para" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subjects">
+              <PropertyRef Name="id_subject" />
+            </Principal>
+            <Dependent Role="Para">
+              <PropertyRef Name="id_subject_pari" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Prepod_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="Prepod" Type="Self.Prepod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="id_role" />
+            </Principal>
+            <Dependent Role="Prepod">
+              <PropertyRef Name="id_role_prepod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Prepod_Spec">
+          <End Role="Spec" Type="Self.Spec" Multiplicity="1" />
+          <End Role="Prepod" Type="Self.Prepod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Spec">
+              <PropertyRef Name="id_spec" />
+            </Principal>
+            <Dependent Role="Prepod">
+              <PropertyRef Name="id_spec_prepod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subjects_Spec">
+          <End Role="Spec" Type="Self.Spec" Multiplicity="1" />
+          <End Role="Subjects" Type="Self.Subjects" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Spec">
+              <PropertyRef Name="id_spec" />
+            </Principal>
+            <Dependent Role="Subjects">
+              <PropertyRef Name="id_spec_subject" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RaspEntities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Auditorii" EntityType="Self.Auditorii" />
+          <EntitySet Name="Para" EntityType="Self.Para" />
+          <EntitySet Name="Prepod" EntityType="Self.Prepod" />
+          <EntitySet Name="Role" EntityType="Self.Role" />
+          <EntitySet Name="Spec" EntityType="Self.Spec" />
+          <EntitySet Name="Subjects" EntityType="Self.Subjects" />
+          <AssociationSet Name="FK_Auditorii_Spec" Association="Self.FK_Auditorii_Spec">
+            <End Role="Spec" EntitySet="Spec" />
+            <End Role="Auditorii" EntitySet="Auditorii" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Para_Auditorii" Association="Self.FK_Para_Auditorii">
+            <End Role="Auditorii" EntitySet="Auditorii" />
+            <End Role="Para" EntitySet="Para" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Para_Prepod" Association="Self.FK_Para_Prepod">
+            <End Role="Prepod" EntitySet="Prepod" />
+            <End Role="Para" EntitySet="Para" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Para_Subjects" Association="Self.FK_Para_Subjects">
+            <End Role="Subjects" EntitySet="Subjects" />
+            <End Role="Para" EntitySet="Para" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Prepod_Role" Association="Self.FK_Prepod_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Prepod" EntitySet="Prepod" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Prepod_Spec" Association="Self.FK_Prepod_Spec">
+            <End Role="Spec" EntitySet="Spec" />
+            <End Role="Prepod" EntitySet="Prepod" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subjects_Spec" Association="Self.FK_Subjects_Spec">
+            <End Role="Spec" EntitySet="Spec" />
+            <End Role="Subjects" EntitySet="Subjects" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище RaspModelContainer" CdmEntityContainer="RaspEntities2">
+          <EntitySetMapping Name="Auditorii">
+            <EntityTypeMapping TypeName="RaspModel.Auditorii">
+              <MappingFragment StoreEntitySet="Auditorii">
+                <ScalarProperty Name="id_auditor" ColumnName="id_auditor" />
+                <ScalarProperty Name="number_auditor" ColumnName="number_auditor" />
+                <ScalarProperty Name="id_spec_auditor" ColumnName="id_spec_auditor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Para">
+            <EntityTypeMapping TypeName="RaspModel.Para">
+              <MappingFragment StoreEntitySet="Para">
+                <ScalarProperty Name="id_pari" ColumnName="id_pari" />
+                <ScalarProperty Name="id_subject_pari" ColumnName="id_subject_pari" />
+                <ScalarProperty Name="id_auditor_pari" ColumnName="id_auditor_pari" />
+                <ScalarProperty Name="id_prepod_pari" ColumnName="id_prepod_pari" />
+                <ScalarProperty Name="time_start" ColumnName="time_start" />
+                <ScalarProperty Name="time_end" ColumnName="time_end" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Prepod">
+            <EntityTypeMapping TypeName="RaspModel.Prepod">
+              <MappingFragment StoreEntitySet="Prepod">
+                <ScalarProperty Name="id_prepod" ColumnName="id_prepod" />
+                <ScalarProperty Name="lname_prepod" ColumnName="lname_prepod" />
+                <ScalarProperty Name="name_prepod" ColumnName="name_prepod" />
+                <ScalarProperty Name="mname_prepod" ColumnName="mname_prepod" />
+                <ScalarProperty Name="login" ColumnName="login" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="id_role_prepod" ColumnName="id_role_prepod" />
+                <ScalarProperty Name="id_spec_prepod" ColumnName="id_spec_prepod" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Role">
+            <EntityTypeMapping TypeName="RaspModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="id_role" ColumnName="id_role" />
+                <ScalarProperty Name="name_role" ColumnName="name_role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Spec">
+            <EntityTypeMapping TypeName="RaspModel.Spec">
+              <MappingFragment StoreEntitySet="Spec">
+                <ScalarProperty Name="id_spec" ColumnName="id_spec" />
+                <ScalarProperty Name="name_spec" ColumnName="name_spec" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subjects">
+            <EntityTypeMapping TypeName="RaspModel.Subjects">
+              <MappingFragment StoreEntitySet="Subjects">
+                <ScalarProperty Name="id_subject" ColumnName="id_subject" />
+                <ScalarProperty Name="name_subject" ColumnName="name_subject" />
+                <ScalarProperty Name="id_spec_subject" ColumnName="id_spec_subject" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
